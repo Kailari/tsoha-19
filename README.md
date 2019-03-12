@@ -16,6 +16,13 @@ Sovelluksen backend pyörii Python + Flask combolla ja renderöi frontin flaskin
 
 [Linkki sovellukseen](http://tsohabook.herokuapp.com)
 
+Sovellukseen on luotu kokeilua varten testikäyttäjät "Jaska Jokunen" ja "Joku Jaskanen" joiden kirjautumistiedot ovat seuraavat:
+
+ |Käyttäjätunnus |Salasana|
+ |---------------|--------|
+ |jaskajoku      |abc123  |
+ |jokutoinen     |abc123  |
+
 ## Dokumentaatio
  - [User stories](./doc/user_stories.md)
 
