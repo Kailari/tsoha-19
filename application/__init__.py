@@ -17,6 +17,8 @@ from application import views
 from application.posts import models
 from application.posts import views
 
+from application.auth import models
+
 try:
     db.create_all()
 except:
