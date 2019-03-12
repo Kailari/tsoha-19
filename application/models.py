@@ -1,4 +1,5 @@
 from application import db
+import datetime
 
 # Base for db tables with
 #  - id = integer primary key
@@ -19,7 +20,7 @@ class WithIDAndDateCreated(WithID):
     __abstract__ = True
 
     date_created = db.Column(db.DateTime,
-                             default=db.func.current_timestamp())
+                             default=datetime.datetime.utcnow)
 
 # Base for db tables with
 #  - id             = integer primary key
@@ -31,5 +32,9 @@ class WithIDAndDatesCreatedAndModified(WithIDAndDateCreated):
     __abstract__ = True
 
     date_modified = db.Column(db.DateTime,
-                              default=db.func.current_timestamp(),
-                              onupdate=db.func.current_timestamp())
+                              default=datetime.datetime.utcnow,
+                              onupdate=datetime.datetime.utcnow)
+
+    def __init__(self):
+        self.date_created = datetime.datetime.utcnow()
+        self.date_modified = self.date_created

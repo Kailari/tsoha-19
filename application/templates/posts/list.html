@@ -5,7 +5,7 @@
 <table>
   <tr>
     <th>Date</th>
-    <th>Modified</th>
+    <th>Edited</th>
     <th>Posted by</th>
     <th>Content</th>
     <th>Edit</th>
@@ -13,14 +13,16 @@
   </tr>
   {% for post in posts %}
   <tr>
-    <td>{{ post.date_created }}</td>
-    <td title="{{ post.date_modified }}" style="text-decoration: underline">
-      {% if post.date_created != post.date_modified %}
+    <td title="{{ timeago_format(post.date_created) }}">{{ post.date_created }}</td>
+    {% if post.date_created != post.date_modified %}
+    <td title="{{ timeago_format(post.date_modified) }}" style="text-decoration: underline">
       Yes
-      {% else %}
-      No
-      {% endif %}
     </td>
+    {% else %}
+    <td title="Post has not been edited" style="text-decoration: underline">
+      No
+    </td>
+    {% endif %}
     <td>{{ post.owner.name }}</td>
     <td>{{ post.content }}</td>
     {% if post.owner_id == current_user.id %}
@@ -37,7 +39,7 @@
     </td>
     {% else %}
     <td colspan="2" style="text-align: center">
-        Posted by another user
+      Posted by another user
     </td>
     {% endif %}
   </tr>
