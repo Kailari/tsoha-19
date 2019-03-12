@@ -1,20 +1,33 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>SomeApp</title>
-  </head>
 
-  <body>
-    <ul>
-      <li><a href="{{ url_for('posts_list') }}">List posts</a></li>
-      <li><a href="{{ url_for('posts_form') }}">Create new post</a></li>
-    </ul>
+<head>
+  <meta charset="utf-8">
+  <title>SomeApp</title>
+</head>
 
-    {% block body %}
-      <p>
-        Content
-      </p>
-    {% endblock %}
-  </body>
+<body>
+  <ul>
+    <li><a href="{{ url_for('posts_list') }}">List posts</a></li>
+    <li><a href="{{ url_for('posts_form') }}">Create new post</a></li>
+    {% if current_user.is_authenticated %}
+    <li>
+      Logged in as {{ current_user.name }}.
+      <a href="{{ url_for('auth_logout') }}">Logout</a>
+    </li>
+    {% else %}
+    <li>
+      <a href="{{ url_for('auth_login') }}">Login</a> /
+      <a href="{{ url_for('auth_register') }}">Register</a>
+    </li>
+    {% endif %}
+  </ul>
+
+  {% block body %}
+  <p>
+    Content
+  </p>
+  {% endblock %}
+</body>
+
 </html>

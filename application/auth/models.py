@@ -42,5 +42,7 @@ class User(WithIDAndDateCreated):
                     "THEN CAST(1 AS BIT)"
                     "ELSE CAST(0 AS BIT) END"
                     ).params(username=username)
-        return db.engine.execute(stmt).first()
+        res = db.engine.execute(stmt).first()
+        print("found: {}".format(res[0]))
+        return res[0] == 1
         

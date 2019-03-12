@@ -1,5 +1,5 @@
 from flask import render_template, request, redirect, url_for
-from flask_login import login_user
+from flask_login import login_user, logout_user
 
 from application import app, bcrypt, db
 from application.auth.models import User
@@ -29,6 +29,12 @@ def auth_login():
     return redirect(url_for("index"))
 
 
+@app.route("/auth/logout")
+def auth_logout():
+    logout_user()
+    return redirect(url_for("index"))
+
+
 @app.route("/auth/register", methods=["GET", "POST"])
 def auth_register():
     if request.method == "GET":
@@ -43,11 +49,7 @@ def auth_register():
 
     pw_hash = bcrypt.generate_password_hash(form.password.data).decode("utf-8")
 
-    print("hash: " + pw_hash)
-
-    user = User(name=form.name.data,
-                username=form.username.data,
-                password_hash=pw_hash)
+    user = User(form.name.data, form.username.data, pw_hash)
     db.session().add(user)
     db.session().commit()
 
