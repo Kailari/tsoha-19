@@ -41,8 +41,8 @@ class User(WithIDAndDateCreated):
                     " FROM account"
                     " WHERE account.username = :username"
                     ")"
-                    "THEN CAST(1 AS BIT)"
-                    "ELSE CAST(0 AS BIT) END"
+                    "THEN CAST(1 AS INTEGER)"
+                    "ELSE CAST(0 AS INTEGER) END"
                     ).params(username=username)
         res = db.engine.execute(stmt).first()
         print("found: {}".format(res[0]))
