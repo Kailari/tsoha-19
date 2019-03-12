@@ -19,7 +19,7 @@ def auth_login():
                                form=form)
 
     user = User.find_user_by_username(form.username.data)
-    if not bcrypt.check_password_hash(user.password_hash, form.password.data):
+    if not user or not bcrypt.check_password_hash(user.password_hash, form.password.data):
         return render_template("auth/login.html",
                                form=form,
                                error="Invalid username or password")
