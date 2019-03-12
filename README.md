@@ -15,3 +15,8 @@ Sosiaalisen median palvelu Facebookin/Twitterin hengessä. Kullakin käyttäjäl
 Sovelluksen backend pyörii Python + Flask combolla ja renderöi frontin flaskin templaateilla. "Tuotantoversio" raksuttaa Herokussa.
 
 [Linkki sovellukseen](http://tsohabook.herokuapp.com)
+
+## Dokumentaatio
+ - [User stories](./doc/user_stories.md)
+
+ - [Tietokantakaavio](./doc/tietokantakaavio.md)
