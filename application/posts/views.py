@@ -20,3 +20,13 @@ def posts_create():
     db.session().commit()
 
     return redirect(url_for("posts_list"))
+
+
+@app.route("/api/posts/<post_id>/", methods=["POST"])
+def posts_edit(post_id):
+    content = request.form.get("content")
+    post = Post.query.get(post_id)
+    post.content = content
+    db.session().commit()
+
+    return redirect(url_for("posts_list"))

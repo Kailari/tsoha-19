@@ -5,11 +5,19 @@
     <tr>
         <th>Date</th>
         <th>Content</th>
+        <th>Edit</th>
     </tr>
     {% for post in posts %}
     <tr>
         <td>{{ post.date_created }}</td>
+        <td>{{ post.date_modified }}</td>
         <td>{{ post.content }}</td>
+        <td>
+            <form method="POST" action="{{ url_for('posts_edit', post_id=post.id) }}">
+                <input type="text" name="content" />
+                <input type="submit" value="Save" />
+            </form>
+        </td>
     </tr>
     {% endfor %}
 </table>
