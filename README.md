@@ -1,4 +1,4 @@
-# Somepalvelu
+# Tsohabook
 Sosiaalisen median palvelu Facebookin/Twitterin hengessä. Kullakin käyttäjällä on oma seinä, johon he voivat julkaista tilapäivityksiä. Käyttäjät voivat kommentoida toistensa tilapäivityksiin ja "tilata" muiden käyttäjien seiniä, jolloin näiden päivitykset ilmestyvät heille yksilöityyn "feediin".
 
 ## Toimintoja
@@ -9,3 +9,9 @@ Sosiaalisen median palvelu Facebookin/Twitterin hengessä. Kullakin käyttäjäl
  - Kommentoija voi itse poistaa kommentin
  - Käyttäjä voi tilata muiden käyttäjien päivityksiä (ja perua tilauksen)
  - Käyttäjälle kootaan yhdelle sivulle kaikki tilattujen käyttäjien päivityksen kronologisessa järjestyksessä
+ - Päivityksiä voi hakea avainsanoilla ja/tai ajankohdan mukaan
+
+## Sovellus
+Sovelluksen backend pyörii Python + Flask combolla ja renderöi frontin flaskin templaateilla. "Tuotantoversio" raksuttaa Herokussa.
+
+[Linkki sovellukseen](http://tsohabook.herokuapp.com)
