@@ -11,6 +11,8 @@ class User(WithIDAndDateCreated):
     username = db.Column(db.String(144), nullable=False, unique=True)
     password_hash = db.Column(db.String(144), nullable=False)
 
+    posts = db.relationship("Post", backref='owner', lazy=True)
+
     def __init__(self, name, username, password_hash):
         self.name = name
         self.username = username

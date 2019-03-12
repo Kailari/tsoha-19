@@ -7,7 +7,8 @@ from application import db
 class WithID(db.Model):
     __abstract__ = True
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer,
+                   primary_key=True)
 
 # Base for db tables with
 #  - id             = integer primary key
@@ -17,7 +18,8 @@ class WithID(db.Model):
 class WithIDAndDateCreated(WithID):
     __abstract__ = True
 
-    date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
+    date_created = db.Column(db.DateTime,
+                             default=db.func.current_timestamp())
 
 # Base for db tables with
 #  - id             = integer primary key
@@ -28,5 +30,6 @@ class WithIDAndDateCreated(WithID):
 class WithIDAndDatesCreatedAndModified(WithIDAndDateCreated):
     __abstract__ = True
 
-    date_modified = db.Column(db.DateTime, default=db.func.current_timestamp(),
+    date_modified = db.Column(db.DateTime,
+                              default=db.func.current_timestamp(),
                               onupdate=db.func.current_timestamp())
