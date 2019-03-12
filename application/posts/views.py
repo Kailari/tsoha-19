@@ -15,8 +15,12 @@ def posts_form():
 
 @app.route("/api/posts/", methods=["POST"])
 def posts_create():
-    post = Post(request.form.get("content"))
+    form = PostForm(request.form)
 
+    if not form.validate():
+        return render_template("posts/create.html", form = form)
+
+    post = Post(form.content.data)
     db.session().add(post)
     db.session().commit()
 
