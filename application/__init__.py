@@ -7,7 +7,6 @@ import timeago, datetime
 @app.context_processor
 def timeago_processor():
     def timeago_format(time):
-        print(type(time))
         return timeago.format(time, datetime.datetime.utcnow())
     return dict(timeago_format=timeago_format)
 
