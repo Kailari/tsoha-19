@@ -2,7 +2,16 @@
   
 {% block body %}
 <form method="POST" action="{{ url_for('posts_create') }}">
-  <input type="text" name="content"/>
-  <input type="submit" value="Create post"/>
+  <table>
+    <tr>
+      <td>{{ form.content.label }}</td>
+      <td>{{ form.content }}</td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <input type="submit" value="Create post"/>
+      </td>
+    </tr>
+  </table>
 </form>
 {% endblock %}

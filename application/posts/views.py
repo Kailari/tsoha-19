@@ -1,6 +1,7 @@
 from application import app, db
 from flask import render_template, request, redirect, url_for
 from application.posts.models import Post
+from application.posts.forms import PostForm
 
 @app.route("/posts", methods=["GET"])
 def posts_list():
@@ -9,7 +10,7 @@ def posts_list():
 
 @app.route("/posts/create/")
 def posts_form():
-    return render_template("posts/create.html")
+    return render_template("posts/create.html", form = PostForm())
 
 
 @app.route("/api/posts/", methods=["POST"])
