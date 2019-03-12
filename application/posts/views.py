@@ -57,8 +57,13 @@ def posts_edit(post_id):
                                error="Not authorized",
                                posts=Post.query.all())
 
-    content = request.form.get("content")
-    post.content = content
+    form = PostForm(request.form)
+    if not form.validate():
+        return render_template("posts/list.html",
+                               error=form.content.errors[0],
+                               posts=Post.query.all())
+
+    post.content = form.content.data
     db.session().commit()
 
     return redirect(url_for("posts_list"))
