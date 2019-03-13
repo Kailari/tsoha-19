@@ -4,7 +4,7 @@
 [Wall|owner_id(pk+fk)]
 [Subscription|user_id:Integer(pk+fk);wall_id:Integer(pk+fk)]
 [Post|id:Integer(pk);owner_id:Integer(fk);wall_id:Integer(fk);date_created:Date;date_modified:Date;content:String]
-[Comment|id:Integer(pk);owner_id:Integer(fk);post_id:Integer(fk);date_created:Date;date_modified:Date]
+[Comment|id:Integer(pk);owner_id:Integer(fk);post_id:Integer(fk);date_created:Date;date_modified:Date;content:String]
 
 [User]1-1[Wall]
 [User]1-*[Subscription]
