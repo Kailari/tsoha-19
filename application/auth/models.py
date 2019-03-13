@@ -1,3 +1,4 @@
+import os
 from application import db
 from application.models import WithIDAndDateCreated
 
@@ -61,10 +62,20 @@ class User(WithIDAndDateCreated):
 
 
 def create_account_triggers():
-    db.engine.execute("""
-    CREATE TRIGGER create_wall_for_user 
-    AFTER INSERT ON Account
-    BEGIN
-        INSERT INTO Wall (id) VALUES (NEW.id);
-    END;
-    """)
+    if os.environ.get("HEROKU"):
+        trigger_stmt = """
+            CREATE TRIGGER create_wall_for_user 
+            AFTER INSERT ON Account
+            [
+                INSERT INTO Wall (id) VALUES (NEW.id);
+            ];
+            """
+    else:
+        trigger_stmt = """
+            CREATE TRIGGER create_wall_for_user 
+            AFTER INSERT ON Account
+            BEGIN
+                INSERT INTO Wall (id) VALUES (NEW.id);
+            END;
+            """
+    db.engine.execute(trigger_stmt)
