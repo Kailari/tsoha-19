@@ -37,7 +37,7 @@ class Post(WithIDAndDatesCreatedAndModified):
                     "  INNER JOIN Wall ON Wall.id = :user_id"
                     "  INNER JOIN Post ON Post.wall_id = Wall.id"
                     "  INNER JOIN Account AS Poster ON Poster.id = Post.owner_id"
-                    "  GROUP BY Post.id"
+                    "  GROUP BY Post.id, Poster.name"
                     ).params(user_id=user_id)
         res = db.engine.execute(stmt)
 
