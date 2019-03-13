@@ -35,6 +35,10 @@ class User(WithIDAndDateCreated):
         return User.query.filter_by(username=username).first()
 
     @staticmethod
+    def find_user_by_id(id):
+        return User.query.filter_by(id=id).first()
+
+    @staticmethod
     def user_with_username_exists(username):
         stmt = text("SELECT CASE WHEN EXISTS ("
                     " SELECT *"

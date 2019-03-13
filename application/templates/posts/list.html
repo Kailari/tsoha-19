@@ -4,7 +4,7 @@
 {{ error }}
 <table>
   <tr>
-    <th>Date</th>
+    <th>Time</th>
     <th>Edited</th>
     <th>Posted by</th>
     <th>Content</th>
@@ -13,7 +13,7 @@
   </tr>
   {% for post in posts %}
   <tr>
-    <td title="{{ timeago_format(post.date_created) }}">{{ post.date_created }}</td>
+    <td title="{{ post.date_created }}">{{ timeago_format(post.date_created) }}</td>
     {% if post.date_created != post.date_modified %}
     <td title="{{ timeago_format(post.date_modified) }}" style="text-decoration: underline">
       Yes
