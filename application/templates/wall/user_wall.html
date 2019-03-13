@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<h1>{{ user.name }}'s Wall</h1>
+<h2>Create new post</h2>
+<form method="POST" action="{{ url_for('user_wall', user_id=user.id) }}">
+  <table>
+    <tr>
+      <td>{{ form.content.label }}</td>
+      <td>{{ form.content }}</td>
+      <td>
+        <ul>
+          {% for error in form.content.errors %}
+          <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <input type="submit" value="Create post" />
+      </td>
+    </tr>
+  </table>
+</form>
+
+<h2>Posts</h2>
+<ul>
+  {% for post in posts %}
+  <li>
+    {{ post.poster_name }}: {{ post.content }}
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}

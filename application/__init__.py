@@ -19,17 +19,22 @@ import os
 if os.environ.get("HEROKU"):
     app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL")
 else:
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///posts.db"
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
     app.config["SQLALCHEMY_ECHO"] = True
 
 from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy(app)
 
-from application import views
 from application.auth import models
 from application.posts import models
+from application.wall import models
+from application.comments import models
+
+from application import views
 from application.auth import views
 from application.posts import views
+from application.feed import views
+from application.wall import views
 
 # Login
 from flask_login import LoginManager
@@ -49,5 +54,8 @@ def load_user(user_id):
 
 try:
     db.create_all()
+
+    from application.auth.models import create_account_triggers
+    create_account_triggers()
 except:
     pass

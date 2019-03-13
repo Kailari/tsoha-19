@@ -3,6 +3,7 @@ from flask_login import login_user, logout_user
 
 from application import app, bcrypt, db
 from application.auth.models import User
+from application.wall.models import Wall
 from application.auth.forms import LoginForm, RegisterForm
 
 
@@ -49,7 +50,9 @@ def auth_register():
 
     pw_hash = bcrypt.generate_password_hash(form.password.data).decode("utf-8")
 
-    user = User(form.name.data, form.username.data, pw_hash)
+    user = User(form.name.data,
+                form.username.data,
+                pw_hash)
     db.session().add(user)
     db.session().commit()
 

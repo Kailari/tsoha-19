@@ -1,6 +1,9 @@
 from application import db
 from application.models import WithIDAndDateCreated
 
+# Make sure Wall is created before User so that trigger creation won't fail
+from application.wall.models import Wall
+
 from sqlalchemy import text
 
 
@@ -12,6 +15,8 @@ class User(WithIDAndDateCreated):
     password_hash = db.Column(db.String(144), nullable=False)
 
     posts = db.relationship("Post", backref='owner', lazy=True)
+    subscriptions = db.relationship("Subscription", backref='user', lazy=True)
+    wall = db.relationship("Wall", backref='owner', uselist=False, lazy=True)
 
     def __init__(self, name, username, password_hash):
         self.name = name
@@ -50,4 +55,16 @@ class User(WithIDAndDateCreated):
                     ).params(username=username)
         res = db.engine.execute(stmt).first()
         return res[0] == 1
-        
+
+
+# Create trigger for adding wall for the user automatically
+
+
+def create_account_triggers():
+    db.engine.execute("""
+    CREATE TRIGGER create_wall_for_user 
+    AFTER INSERT ON Account
+    BEGIN
+        INSERT INTO Wall (id) VALUES (NEW.id);
+    END;
+    """)
