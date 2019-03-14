@@ -32,6 +32,11 @@ class Post(WithIDAndDatesCreatedAndModified):
             # If pagination is implemented, this can be discarded
             older_than = datetime.datetime.utcnow() + datetime.timedelta(seconds=30)
 
+        if os.environ.get("HEROKU"):
+            stmt_where_date = "WHERE Post.date_created <= :older_than::date"
+        else:
+            stmt_where_date = "WHERE Post.date_created <= Datetime(:older_than)"
+
         stmt = text("SELECT "
                     " Post.id AS post_id,"
                     " Post.owner_id AS poster_id,"
@@ -43,7 +48,7 @@ class Post(WithIDAndDatesCreatedAndModified):
                     "  INNER JOIN Wall ON Wall.id = :user_id"
                     "  INNER JOIN Post ON Post.wall_id = Wall.id"
                     "  INNER JOIN Account AS Poster ON Poster.id = Post.owner_id"
-                    "  WHERE Post.date_created <= Datetime(:older_than)"
+                    + stmt_where_date +
                     "  GROUP BY Post.id, Poster.name"
                     "  ORDER BY Post.date_created DESC" +
                     ("  LIMIT :limit" if limit > 0 else "")
