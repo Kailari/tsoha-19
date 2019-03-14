@@ -13,7 +13,6 @@ def user_wall(user_id):
 
     if not user:
         return redirect(url_for("user_feed",
-                                user_id=current_user.id,
                                 error="Invalid user ID"))
 
     if request.method == "GET":
@@ -27,6 +26,7 @@ def user_wall(user_id):
     if not form.validate():
         return render_template("wall/user_wall.html",
                                posts=Post.get_posts_for_user_wall(user_id),
+                               user=user,
                                form=form)
 
     content = form.content.data
@@ -38,4 +38,5 @@ def user_wall(user_id):
     db.session().add(post)
     db.session().commit()
 
-    return redirect(url_for("user_wall", user_id=user_id))
+    return redirect(url_for("user_wall",
+                            user_id=user_id))

@@ -1,6 +1,7 @@
 from application import db
 from application.models import WithIDAndDatesCreatedAndModified
 from sqlalchemy import text
+import datetime
 import os
 
 
@@ -25,7 +26,12 @@ class Post(WithIDAndDatesCreatedAndModified):
         self.owner_id = owner_id
 
     @staticmethod
-    def get_posts_for_user_wall(user_id):
+    def get_posts_for_user_wall(user_id, older_than=None, limit=-1):
+        if older_than == None:
+            # Ugly hack to make sure new posts are considered "new enough" to be selected
+            # If pagination is implemented, this can be discarded
+            older_than = datetime.datetime.utcnow() + datetime.timedelta(seconds=30)
+
         stmt = text("SELECT "
                     " Post.id AS post_id,"
                     " Post.owner_id AS poster_id,"
@@ -37,8 +43,11 @@ class Post(WithIDAndDatesCreatedAndModified):
                     "  INNER JOIN Wall ON Wall.id = :user_id"
                     "  INNER JOIN Post ON Post.wall_id = Wall.id"
                     "  INNER JOIN Account AS Poster ON Poster.id = Post.owner_id"
+                    "  WHERE Post.date_created <= Datetime(:older_than)"
                     "  GROUP BY Post.id, Poster.name"
-                    ).params(user_id=user_id)
+                    "  ORDER BY Post.date_created DESC" +
+                    ("  LIMIT :limit" if limit > 0 else "")
+                    ).params(user_id=user_id, older_than=str(older_than), limit=limit)
         res = db.engine.execute(stmt)
 
         posts = []
@@ -47,8 +56,8 @@ class Post(WithIDAndDatesCreatedAndModified):
                 "post_id": row["post_id"],
                 "poster_id": row["poster_id"],
                 "poster_name": row["poster_name"],
-                "date_created": row["date_created"],
-                "date_modified": row["date_modified"],
+                "date_created": datetime.datetime.strptime(row["date_created"], "%Y-%m-%d %H:%M:%S.%f"),
+                "date_modified": datetime.datetime.strptime(row["date_modified"], "%Y-%m-%d %H:%M:%S.%f"),
                 "content": row["content"],
             })
         return posts

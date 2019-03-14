@@ -7,58 +7,74 @@
   <title>Tsohabook</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/main.css') }}">
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
-    <a class="navbar-brand" href="/">Tsohabook</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
-      aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarCollapse">
-      {% if current_user.is_authenticated %}
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('user_feed') }}">My feed</a>
-        </li>
-      </ul>
-      <div class="form-inline mt-2 mt-md-0">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('user_wall', user_id=current_user.id) }}">
-              {{ current_user.name }}
-            </a>
-          </li>
-        </ul>
-        <a class="ml-4" href="{{ url_for('auth_logout') }}">Logout</a>
+  <div class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+        <a class="navbar-brand" href="/">Tsohabook</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+          aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+          {% if current_user.is_authenticated %}
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('user_feed') }}">My feed</a>
+            </li>
+          </ul>
+          <div class="form-inline mt-2 mt-md-0">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('user_wall', user_id=current_user.id) }}">
+                  {{ current_user.name }}
+                </a>
+              </li>
+            </ul>
+            <a class="ml-4" href="{{ url_for('auth_logout') }}">Logout</a>
+          </div>
+          {% else %}
+          <div class="mr-auto"></div>
+          <a style="margin-right: 5px" href="{{ url_for('auth_login') }}">Login</a>
+          <span class="navbar-brand" style="margin-right: 5px">/</span>
+          <a href="{{ url_for('auth_register') }}">Register</a>
+          {% endif %}
+        </div>
+      </nav>
+    </header>
+
+    <main role="main" class="container">
+      {% block body %}
+      <p>
+        Content
+      </p>
+      {% endblock %}
+    </main>
+
+    <footer class="footer mt-auto">
+      <div class="container">
+        <span class="text-muted">
+          <b>Tsohabook</b> - the antisocial media platform; Just like Facebook, except there's no actual users!
+        </span>
       </div>
-      {% else %}
-      <div class="mr-auto"></div>
-      <a style="margin-right: 5px" href="{{ url_for('auth_login') }}">Login</a>
-      <span class="navbar-brand" style="margin-right: 5px">/</span>
-      <a href="{{ url_for('auth_register') }}">Register</a>
-      {% endif %}
-    </div>
-  </nav>
+    </footer>
 
-  <main role="main" class="container">
-    {% block body %}
-    <p>
-      Content
-    </p>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"></script>
+
+    {% block scripts %}
     {% endblock %}
-  </main>
-
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-    crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-    crossorigin="anonymous"></script>
+  </div>
 </body>
 
 </html>
