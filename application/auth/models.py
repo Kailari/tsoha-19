@@ -16,6 +16,7 @@ class User(WithIDAndDateCreated):
     password_hash = db.Column(db.String(144), nullable=False)
 
     posts = db.relationship("Post", backref='owner', lazy=True)
+    comments = db.relationship("Comment", backref='owner', lazy=True)
     subscriptions = db.relationship("Subscription", backref='user', lazy=True)
     wall = db.relationship("Wall", backref='owner', uselist=False, lazy=True)
 

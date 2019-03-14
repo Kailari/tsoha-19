@@ -1,7 +1,30 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<h1>{{ user.name }}'s Wall</h1>
+<h1>{{ user.name }}</h1>
+
+<ul class="list-group list-group-horizontal mb-2">
+  <li class="list-group-item flex-fill text-center">
+    Subscribers
+    <hr class="mt-0">
+    {{ user.wall.subscribers|count }}
+  </li>
+  <li class="list-group-item flex-fill text-center">
+    Following
+    <hr class="mt-0">
+    {{ user.subscriptions|count }}
+  </li>
+  <li class="list-group-item flex-fill text-center">
+    Posts
+    <hr class="mt-0">
+    {{ user.posts|count }}
+  </li>
+  <li class="list-group-item flex-fill text-center">
+    Comments
+    <hr class="mt-0">
+    {{ user.comments|count }}
+  </li>
+</ul>
 
 <div class="card mb-2">
   <form method="POST" action="{{ url_for('user_wall', user_id=user.id) }}" novalidate>

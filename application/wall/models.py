@@ -8,7 +8,7 @@ class Wall(db.Model):
                    nullable=False)
 
     posts = db.relationship("Post", backref='wall', lazy=True)
-    subscriptions = db.relationship("Subscription", backref='wall', lazy=True)
+    subscribers = db.relationship("Subscription", backref='wall', lazy=True)
 
     def __init__(self, owner_id):
         self.owner_id = owner_id
