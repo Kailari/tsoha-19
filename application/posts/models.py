@@ -39,21 +39,24 @@ class Post(WithIDAndDatesCreatedAndModified):
             older_than = datetime.datetime.utcnow() + datetime.timedelta(seconds=30)
 
         if os.environ.get("HEROKU"):
-            stmt_where_date = "  WHERE Post.date_created <= CAST(:older_than AS timestamp)"
+            stmt_where_date = " AND Post.date_created <= CAST(:older_than AS timestamp)"
         else:
-            stmt_where_date = "  WHERE Post.date_created <= Datetime(:older_than)"
+            stmt_where_date = " AND Post.date_created <= Datetime(:older_than)"
 
         stmt = text("SELECT "
                     " Post.id AS post_id,"
                     " Post.owner_id AS poster_id,"
                     " Poster.name AS poster_name,"
+                    " WallOwner.id AS wall_owner_id,"
+                    " WallOwner.name AS wall_owner_name,"
                     " Post.date_created AS date_created,"
                     " Post.date_modified AS date_modified,"
                     " Post.content AS content"
-                    " FROM Account"
-                    "  INNER JOIN Wall ON Wall.id = :user_id"
-                    "  INNER JOIN Post ON Post.wall_id = Wall.id"
+                    " FROM Post"
                     "  INNER JOIN Account AS Poster ON Poster.id = Post.owner_id"
+                    "  INNER JOIN Wall ON Wall.id = Post.wall_id"
+                    "  INNER JOIN Account AS WallOwner ON WallOwner.id = Wall.id"
+                    " WHERE WallOwner.id = :user_id"
                     + stmt_where_date +
                     "  GROUP BY Post.id, Poster.name"
                     "  ORDER BY Post.date_created DESC" +
@@ -67,6 +70,8 @@ class Post(WithIDAndDatesCreatedAndModified):
                 "post_id": row["post_id"],
                 "poster_id": row["poster_id"],
                 "poster_name": row["poster_name"],
+                "wall_owner_id": row["wall_owner_id"],
+                "wall_owner_name": row["wall_owner_name"],
                 "date_created": Post._process_date(row["date_created"]),
                 "date_modified": Post._process_date(row["date_modified"]),
                 "content": row["content"],
@@ -81,26 +86,30 @@ class Post(WithIDAndDatesCreatedAndModified):
             older_than = datetime.datetime.utcnow() + datetime.timedelta(seconds=30)
 
         if os.environ.get("HEROKU"):
-            stmt_where_date = "  WHERE Post.date_created <= CAST(:older_than AS timestamp)"
+            stmt_where_date = " AND Post.date_created <= CAST(:older_than AS timestamp)"
         else:
-            stmt_where_date = "  WHERE Post.date_created <= Datetime(:older_than)"
+            stmt_where_date = " AND Post.date_created <= Datetime(:older_than)"
 
         stmt = text("SELECT "
                     " Post.id AS post_id,"
-                    " Post.owner_id AS poster_id,"
+                    " Poster.id AS poster_id,"
                     " Poster.name AS poster_name,"
+                    " WallOwner.id AS wall_owner_id,"
+                    " WallOwner.name AS wall_owner_name,"
                     " Post.date_created AS date_created,"
                     " Post.date_modified AS date_modified,"
                     " Post.content AS content"
-                    " FROM Account"
-                    "  INNER JOIN Wall ON Wall.id = :user_id"
-                    "  INNER JOIN Post ON Post.wall_id = Wall.id"
-                    "  INNER JOIN Account AS Poster ON Poster.id = Post.owner_id"
+                    " FROM Post"
+                    "  LEFT JOIN Account AS Poster ON Post.owner_id = Poster.id"
+                    "  LEFT JOIN Wall ON Wall.id = Post.wall_id"
+                    "  LEFT JOIN Subscription ON Subscription.wall_id = Wall.id"
+                    "  LEFT JOIN Account AS WallOwner ON WallOwner.id = Wall.id"
+                    "  WHERE (Subscription.owner_id = :user_id OR Post.owner_id = :user_id OR Post.wall_id = :user_wall_id)"
                     + stmt_where_date +
                     "  GROUP BY Post.id, Poster.name"
                     "  ORDER BY Post.date_created DESC" +
                     ("  LIMIT :limit" if limit > 0 else "")
-                    ).params(user_id=user_id, older_than=str(older_than), limit=limit)
+                    ).params(user_id=user_id, user_wall_id=user_id, older_than=str(older_than), limit=limit)
         res = db.engine.execute(stmt)
 
         posts = []
@@ -109,6 +118,8 @@ class Post(WithIDAndDatesCreatedAndModified):
                 "post_id": row["post_id"],
                 "poster_id": row["poster_id"],
                 "poster_name": row["poster_name"],
+                "wall_owner_id": row["wall_owner_id"],
+                "wall_owner_name": row["wall_owner_name"],
                 "date_created": Post._process_date(row["date_created"]),
                 "date_modified": Post._process_date(row["date_modified"]),
                 "content": row["content"],

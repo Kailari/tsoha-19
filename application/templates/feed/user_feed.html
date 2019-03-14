@@ -3,4 +3,42 @@
 
 {% block body %}
 {{ posts_feed(posts, current_user, "user_feed", current_user.id) }}
+<div>
+  <div class="overlay" onclick="backToTop()">
+    <span class="text-white">Back to top</span>
+  </div>
+  <div class="text-center">
+    <hr>
+    <span class="text-muted">No more posts :c</span>
+    <hr>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  var sizeTheOverlays = function () {
+    $(".overlay").resize().each(function () {
+      var h = $(this).parent().outerHeight();
+      var w = $(this).parent().outerWidth();
+      $(this).css("height", h);
+      $(this).css("width", w);
+    });
+  };
+
+  sizeTheOverlays();
+
+  var width = $(window).width();
+  $(window).resize(function () {
+    if ($(this).width() != width) {
+      width = $(this).width();
+      sizeTheOverlays();
+    }
+  });
+
+  function backToTop() {
+    document.body.scrollTop = 0
+    document.documentElement.scrollTop = 0
+  }
+</script>
 {% endblock %}

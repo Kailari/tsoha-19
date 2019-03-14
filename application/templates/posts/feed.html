@@ -6,7 +6,14 @@
       <a href="{{ url_for('user_wall', id=post.poster_id) }}">
         {{ post.poster_name }}
       </a>
-      <small class="ml-2">{{ '(You)' if post.poster_id == current_user.id else '' }}</small>
+      <small class="ml-1">{{ '(You)' if post.poster_id == current_user.id else '' }}</small>
+      {% if post.poster_id != post.wall_owner_id %}
+      <span class="mx-2">></span>
+      <a href="{{ url_for('user_wall', id=post.wall_owner_id) }}">
+          {{ post.wall_owner_name }}
+      </a>
+      <small class="ml-1">{{ '(You)' if post.wall_owner_id == current_user.id else '' }}</small>
+      {% endif %}
       <small class="text-muted float-right">
         {{ timeago_format(post.date_created) }}
         {% if post.poster_id == current_user.id %}
