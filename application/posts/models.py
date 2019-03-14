@@ -25,6 +25,12 @@ class Post(WithIDAndDatesCreatedAndModified):
         self.wall_id = wall_id
         self.owner_id = owner_id
 
+    def _process_date(date):
+        if os.environ.get("HEROKU"):
+            return date
+        else:
+            return datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S.%f")
+
     @staticmethod
     def get_posts_for_user_wall(user_id, older_than=None, limit=-1):
         if older_than == None:
@@ -61,8 +67,8 @@ class Post(WithIDAndDatesCreatedAndModified):
                 "post_id": row["post_id"],
                 "poster_id": row["poster_id"],
                 "poster_name": row["poster_name"],
-                "date_created": datetime.datetime.strptime(row["date_created"], "%Y-%m-%d %H:%M:%S.%f"),
-                "date_modified": datetime.datetime.strptime(row["date_modified"], "%Y-%m-%d %H:%M:%S.%f"),
+                "date_created": Post._process_date(row["date_created"]),
+                "date_modified": Post._process_date(row["date_modified"]),
                 "content": row["content"],
             })
         return posts
