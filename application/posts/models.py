@@ -106,7 +106,7 @@ class Post(WithIDAndDatesCreatedAndModified):
                     "  LEFT JOIN Account AS WallOwner ON WallOwner.id = Wall.id"
                     "  WHERE (Subscription.owner_id = :user_id OR Post.owner_id = :user_id OR Post.wall_id = :user_wall_id)"
                     + stmt_where_date +
-                    "  GROUP BY Post.id, Poster.id, Poster.name"
+                    "  GROUP BY Post.id, Poster.id, Poster.name, WallOwner.id"
                     "  ORDER BY Post.date_created DESC" +
                     ("  LIMIT :limit" if limit > 0 else "")
                     ).params(user_id=user_id, user_wall_id=user_id, older_than=str(older_than), limit=limit)
