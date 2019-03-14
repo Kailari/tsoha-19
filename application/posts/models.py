@@ -33,7 +33,7 @@ class Post(WithIDAndDatesCreatedAndModified):
             older_than = datetime.datetime.utcnow() + datetime.timedelta(seconds=30)
 
         if os.environ.get("HEROKU"):
-            stmt_where_date = "WHERE Post.date_created <= :older_than::date"
+            stmt_where_date = "WHERE Post.date_created <= CAST(:older_than AS timestamp)"
         else:
             stmt_where_date = "WHERE Post.date_created <= Datetime(:older_than)"
 
