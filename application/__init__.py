@@ -35,6 +35,7 @@ from application.auth import views
 from application.posts import views
 from application.feed import views
 from application.wall import views
+from application.search import views
 
 # Login
 from flask_login import LoginManager

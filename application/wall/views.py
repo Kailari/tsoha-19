@@ -51,7 +51,7 @@ def wall_unsub(id):
         db.session().delete(subscription)
         db.session().commit()
 
-    return try_redirect(request, "user_wall", id=id)
+    return try_redirect(request, "user_wall", **request.args, id=id)
 
 @app.route("/wall/<id>/subscribe", methods=["POST"])
 @login_required
@@ -60,4 +60,4 @@ def wall_sub(id):
     db.session().add(subscription)
     db.session().commit()
 
-    return try_redirect(request, "user_wall", id=id)
+    return try_redirect(request, "user_wall", **request.args, id=id)

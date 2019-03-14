@@ -1,7 +1,12 @@
 {% extends "layout.html" %}
-{% from "posts/feed.html" import posts_feed with context %}
+{% from "macros/feed.html" import posts_feed with context %}
 
 {% block body %}
+<div class="mb-3">
+  <h1 class="mb-0">Feed</h1>
+  <hr class="my-0">
+  <small class="text-muted">All posts from your own wall and from all of your subscribed walls.</small>
+</div>
 {{ posts_feed(posts, current_user, "user_feed", current_user.id) }}
 <div>
   <div class="overlay" onclick="backToTop()">

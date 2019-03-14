@@ -1,4 +1,6 @@
 import os
+import re
+import string
 from application import db
 from application.models import WithIDAndDateCreated
 
@@ -57,6 +59,31 @@ class User(WithIDAndDateCreated):
                     ).params(username=username)
         res = db.engine.execute(stmt).first()
         return res[0] == 1
+
+    @staticmethod
+    def find_users_by_partial_username(name_filter, user_id):
+        stmt = text("SELECT"
+                    "  Account.id AS id,"
+                    "  Account.name AS name,"
+                    "  Subscription.owner_id AS sub"
+                    " FROM Account"
+                    " INNER JOIN Wall ON Account.id = Wall.id"
+                    " LEFT JOIN Subscription ON Subscription.wall_id = Wall.id"
+                    "                      AND Subscription.owner_id = :user_id"
+                    " WHERE UPPER(Account.name) LIKE UPPER(:name_filter)"
+                    ).params(user_id=user_id,
+                             name_filter="%{}%".format(re.sub('[\W_]+', '', name_filter)))
+        res = db.engine.execute(stmt)
+
+        users = []
+        for row in res:
+            print("typeof row: {}".format(type(row)))
+            users.append({
+                "id": row["id"],
+                "name": row["name"],
+                "is_subscriber": (row["sub"] != None) if "sub" in row else False,
+            })
+        return users
 
 
 # Create trigger for adding wall for the user automatically

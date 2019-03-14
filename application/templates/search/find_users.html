@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% from "macros/subscribe_button.html" import subscribe_button with context %}
+
+{% block body %}
+<div class="card mb-2">
+  <form method="GET" action="{{ url_for('user_search') }}" novalidate>
+    <label class="form-label card-header w-100" for="filter">
+      <h5>Search for users</h5>
+    </label>
+    <div class="card-body p-0">
+      <div class="input-group">
+        {{ form.name_filter(class="form-control form-control-lg",
+                            required="",
+                            placeholder="Enter a name",
+                            **{'aria-describedby': "filterHelp"}) }}
+        <button type="submit" class="btn-lg btn-primary float-sm-right">Find</button>
+      </div>
+
+      <small id="filterHelp" class="form-text text-muted ml-2 mb-2">
+        Enter the name of the person you are looking for.
+      </small>
+    </div>
+  </form>
+</div>
+
+{% if users %}
+<h3>Results</h3>
+{% endif %}
+
+{% for user in users %}
+<div class="card mb-2">
+  <h5 class="card-body my-0 py-2">
+    <a href="{{ url_for('user_wall', id=user.id) }}">{{ user.name }}</a>
+    <div class="float-right">
+      {{ subscribe_button(user, current_user, user.is_subscriber, redir='user_search', name_filter=name_filter) }}
+    </div>
+  </h5>
+</div>
+{% endfor %}
+
+{% endblock %}
