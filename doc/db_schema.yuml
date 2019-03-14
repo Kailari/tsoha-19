@@ -1,10 +1,10 @@
 // {type:class}
 // {direction:topDown}
-[User|id:Integer(pk);username:String;password_hash:String]
-[Wall|owner_id(pk+fk)]
-[Subscription|user_id:Integer(pk+fk);wall_id:Integer(pk+fk)]
-[Post|id:Integer(pk);owner_id:Integer(fk);wall_id:Integer(fk);date_created:Date;date_modified:Date;content:String]
-[Comment|id:Integer(pk);owner_id:Integer(fk);post_id:Integer(fk);date_created:Date;date_modified:Date;content:String]
+[User|id:Integer(pk);username:String;password_hash:String;date_created:DateTime]
+[Wall|id(pk+fk)]
+[Subscription|owner_id:Integer(pk+fk);wall_id:Integer(pk+fk)]
+[Post|id:Integer(pk);owner_id:Integer(fk);wall_id:Integer(fk);date_created:DateTime;date_modified:Date;content:String]
+[Comment|id:Integer(pk);owner_id:Integer(fk);post_id:Integer(fk);date_created:DateTime;date_modified:Date;content:String]
 
 [User]1-1[Wall]
 [User]1-*[Subscription]
