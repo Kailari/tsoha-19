@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<div class="card mb-2">
+    <form method="POST" action="{{ url_for('posts_edit', post_id=post_id, redir=redir, redir_id=redir_id) }}"
+        novalidate>
+        <div class="form-group mb-0">
+            <label class="form-label card-header" style="width: 100%" for="newContent">
+                <h5>Edit post
+                    <button type="submit" class="btn btn-primary float-sm-right">Edit</button>
+                </h5>
+            </label>
+            <div class="card-body p-0">
+                <!--
+                <textarea class="form-control" name="content" id="newContent" rows="3" aria-describedby="newContentHelp"
+                    required>{{ form.content.content }}</textarea>
+                    -->
+                {{ form.content(class="form-control", 
+                                rows=3, 
+                                required="",
+                                **{'aria-describedby': "contentHelp"}) 
+                }}
+                <small id="contentHelp" class="form-text text-muted sr-only">
+                    Edited contents of your post.
+                </small>
+            </div>
+            {% if form.content.errors %}
+            <div class="alert alert-danger mb-0 py-1" role="alert">
+                {% for error in form.content.errors %}
+                {{ error }}<br />
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </form>
+</div>
+
+
+{% endblock %}

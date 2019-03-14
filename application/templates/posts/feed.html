@@ -1,0 +1,41 @@
+{% macro posts_feed(posts, current_user, redir, redir_id) %}
+<div>
+  {% for post in posts %}
+  <div class="card mb-2">
+    <h5 class="card-header">
+      <a href="{{ url_for('user_wall', id=post.poster_id) }}">
+        {{ post.poster_name }}
+      </a>
+      <small class="ml-2">{{ '(You)' if post.poster_id == current_user.id else '' }}</small>
+      <small class="text-muted float-right">
+        {{ timeago_format(post.date_created) }}
+        {% if post.poster_id == current_user.id %}
+        <form class="float-sm-right" method="POST"
+          action="{{ url_for('posts_remove', post_id=post.post_id, redir=redir, redir_id=redir_id) }}">
+          <button type="submit" class="ml-2 btn btn-outline-danger btn-sm">
+            <img src="https://cdnjs.cloudflare.com/ajax/libs/octicons/8.5.0/svg/trashcan.svg">
+          </button>
+        </form>
+        <a href="{{ url_for('posts_edit', post_id=post.post_id, redir=redir, redir_id=redir_id) }}">
+          <button type="submit" class="ml-2 btn btn-outline-secondary btn-sm">
+            <img src="https://cdnjs.cloudflare.com/ajax/libs/octicons/8.5.0/svg/pencil.svg">
+          </button>
+        </a>
+        {% endif %}
+      </small>
+    </h5>
+    <div class="card-body">
+      <p class="card-text post-content">{{ post.content }}</p>
+    </div>
+    {% if post.date_modified != post.date_created %}
+    <hr class="my-0">
+    <div class="card-body pt-0 pb-2">
+      <small class="card-text">
+        Edited {{ timeago_format(post.date_modified) }}
+      </small>
+    </div>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+{% endmacro %}

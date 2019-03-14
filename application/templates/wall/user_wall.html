@@ -1,7 +1,24 @@
 {% extends "layout.html" %}
+{% from "posts/feed.html" import posts_feed with context %}
 
 {% block body %}
-<h1>{{ user.name }}</h1>
+
+<h1>
+  {{ user.name }}
+  <div class="float-right">
+    {% if user.id != current_user.id %}
+    {% if current_user.id in user.wall.subscribers|map(attribute="owner_id")|list %}
+    <form method="POST" action="{{ url_for('wall_unsub', id=user.id, redir='user_wall', redir_id=user.id) }}">
+      <button type="submit" class="btn btn-outline-primary">Following</button>
+    </form>
+    {% else %}
+    <form method="POST" action="{{ url_for('wall_sub', id=user.id, redir='user_wall', redir_id=user.id) }}">
+      <button type="submit" class="btn btn-primary">Subscribe</button>
+    </form>
+    {% endif %}
+    {% endif %}
+  </div>
+</h1>
 
 <ul class="list-group list-group-horizontal mb-2">
   <li class="list-group-item flex-fill text-center">
@@ -27,7 +44,7 @@
 </ul>
 
 <div class="card mb-2">
-  <form method="POST" action="{{ url_for('user_wall', user_id=user.id) }}" novalidate>
+  <form method="POST" action="{{ url_for('user_wall', id=user.id) }}" novalidate>
     <div class="form-group mb-0">
       <label class="form-label card-header" style="width: 100%" for="newContent">
         <h5>Create new post
@@ -35,8 +52,9 @@
         </h5>
       </label>
       <div class="card-body p-0">
-        <textarea class="form-control" name="content" id="newContent" placeholder="How's your day?" rows="3"
-          aria-describedby="newContentHelp" required></textarea>
+        <textarea class="form-control" name="content" id="newContent"
+          placeholder="{{ 'How\'s your day?' if user.id == current_user.id else 'Say \'Hi!\' to ' + user.name + '!' }}"
+          rows="3" aria-describedby="newContentHelp" required></textarea>
         <small id="newContentHelp" class="form-text text-muted sr-only">
           Contents of your post. e.g. How was your day?
         </small>
@@ -49,30 +67,11 @@
       </div>
       {% endif %}
     </div>
-    <div class="form-group mb-0">
-
-    </div>
   </form>
 </div>
 
 <h2>Posts</h2>
-<div>
-  {% for post in posts %}
-  <div class="card mb-2">
-    <h5 class="card-header">
-      {{ post.poster_name }}
-      <small class="text-muted float-sm-right">
-        {{ timeago_format(post.date_created) }}
-      </small>
-    </h5>
-    <div class="card-body">
-      <p class="card-text">
-        {{ post.content }}
-      </p>
-    </div>
-  </div>
-  {% endfor %}
-</div>
+{{ posts_feed(posts, current_user, "user_wall", user.id) }}
 <div>
   <div class="overlay" onclick="backToTop()">
     <span class="text-white">Back to top</span>
@@ -110,5 +109,8 @@
     document.body.scrollTop = 0
     document.documentElement.scrollTop = 0
   }
+
+  // Trim all textareas
+  $("textarea").each(function () { $(this).val($(this).val().trim()); });
 </script>
 {% endblock %}

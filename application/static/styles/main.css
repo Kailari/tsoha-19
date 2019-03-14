@@ -34,3 +34,7 @@ html, body {
 .overlay.button {
     margin:5px;
 }
+
+.post-content {
+    white-space: pre-line;
+}

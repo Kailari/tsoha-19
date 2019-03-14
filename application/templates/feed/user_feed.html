@@ -1,7 +1,6 @@
 {% extends "layout.html" %}
+{% from "posts/feed.html" import posts_feed with context %}
 
 {% block body %}
-  <p>
-    TODO: User feed
-  </p>
+{{ posts_feed(posts, current_user, "user_feed", current_user.id) }}
 {% endblock %}
