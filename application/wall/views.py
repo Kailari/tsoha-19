@@ -1,3 +1,4 @@
+import re
 from application import app, db
 from application.utils import try_redirect
 from flask import render_template, request, redirect, url_for
@@ -31,10 +32,13 @@ def user_wall(id):
                                user=user,
                                form=form)
 
-    content = form.content.data
+    content = re.sub(r"^\s+", 
+                     "",
+                     form.content.data,
+                     flags=re.MULTILINE).strip()
     owner_id = current_user.id
     wall_id = user.wall.id
-    
+
     post = Post(content, owner_id, wall_id)
     db.session().add(post)
     db.session().commit()
@@ -42,16 +46,19 @@ def user_wall(id):
     return redirect(url_for("user_wall",
                             id=id))
 
+
 @app.route("/wall/<id>/unsubscribe", methods=["POST"])
 @login_required
 def wall_unsub(id):
-    subscription = Subscription.query.filter_by(owner_id=current_user.id, wall_id=id).first()
+    subscription = Subscription.query.filter_by(
+        owner_id=current_user.id, wall_id=id).first()
 
     if subscription:
         db.session().delete(subscription)
         db.session().commit()
 
     return try_redirect(request, "user_wall", **request.args, id=id)
+
 
 @app.route("/wall/<id>/subscribe", methods=["POST"])
 @login_required

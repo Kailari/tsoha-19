@@ -8,7 +8,9 @@ class PostForm(FlaskForm):
                           widget=TextArea(),
                           validators=[
                               validators.Length(
-                                  min=1, max=255, message="Post length must be 1 to 255 characters")])
+                                  min=1,
+                                  max=255,
+                                  message="Post length must be 1 to 255 characters")])
 
     class Meta:
         csrf = False
