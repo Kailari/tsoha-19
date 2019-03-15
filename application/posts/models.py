@@ -40,8 +40,10 @@ class Post(WithIDAndDatesCreatedAndModified):
                     " WallOwner.name AS wall_owner_name,"
                     " Post.date_created AS date_created,"
                     " Post.date_modified AS date_modified,"
-                    " Post.content AS content"
+                    " Post.content AS content,"
+                    " COUNT(Comment.id) AS comment_count"
                     " FROM Post"
+                    "  LEFT JOIN Comment ON Comment.post_id = Post.id"
                     "  INNER JOIN Account AS Poster ON Poster.id = Post.owner_id"
                     "  INNER JOIN Wall ON Wall.id = Post.wall_id"
                     "  INNER JOIN Account AS WallOwner ON WallOwner.id = Wall.id"
@@ -64,6 +66,7 @@ class Post(WithIDAndDatesCreatedAndModified):
                 "date_created": row["date_created"],
                 "date_modified": row["date_modified"],
                 "content": row["content"],
+                "comment_count": row["comment_count"],
             })
         return posts
 
@@ -82,8 +85,10 @@ class Post(WithIDAndDatesCreatedAndModified):
                     " WallOwner.name AS wall_owner_name,"
                     " Post.date_created AS date_created,"
                     " Post.date_modified AS date_modified,"
-                    " Post.content AS content"
+                    " Post.content AS content,"
+                    " COUNT(Comment.id) AS comment_count"
                     " FROM Post"
+                    "  LEFT JOIN Comment ON Comment.post_id = Post.id"
                     "  LEFT JOIN Account AS Poster ON Post.owner_id = Poster.id"
                     "  LEFT JOIN Wall ON Wall.id = Post.wall_id"
                     "  LEFT JOIN Subscription ON Subscription.wall_id = Wall.id"
@@ -107,5 +112,6 @@ class Post(WithIDAndDatesCreatedAndModified):
                 "date_created": row["date_created"],
                 "date_modified": row["date_modified"],
                 "content": row["content"],
+                "comment_count": row["comment_count"],
             })
         return posts

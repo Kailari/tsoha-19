@@ -1,0 +1,37 @@
+<!-- Post header: Poster name, user owning the wall, timestamp. Controls for owning user -->
+{% macro post_card_header(
+  post_id,
+  date_created,
+  post_owner_id,
+  post_owner_name,
+  wall_owner_id,
+  wall_owner_name
+) %}
+<div class="card-header d-flex flex-row align-items-center py-2">
+  <a href="{{ url_for('user_wall', id=post_owner_id) }}">
+    <h5>{{ post_owner_name }}</h5>
+  </a>
+  <small class="ml-1">{{ '(You)' if post_owner_id == current_user.id else '' }}</small>
+  <!-- If not posted on own wall, show name of the user who's wall the post is on -->
+  {% if post_owner_id != wall_owner_id %}
+  <span class="mx-2">></span>
+  <a href="{{ url_for('user_wall', id=wall_owner_id) }}">{{ wall_owner_name }}</a>
+  <small class="ml-1">{{ '(You)' if wall_owner_id == current_user.id else '' }}</small>
+  {% endif %}
+  <!-- Posted X ago -->
+  <small class="text-muted ml-auto mr-2">
+    {{ timeago_format(date_created) }}
+  </small>
+  <!-- Controls for edit/delete -->
+  {% if post_owner_id == current_user.id %}
+  <a class="btn btn-outline-secondary btn-sm" href="{{ url_for('posts_edit', post_id=post_id, **kwargs) }}">
+    <img src="https://cdnjs.cloudflare.com/ajax/libs/octicons/8.5.0/svg/pencil.svg">
+  </a>
+  <form method="POST" action="{{ url_for('posts_remove', post_id=post_id, **kwargs) }}">
+    <button type="submit" class="ml-2 btn btn-outline-danger btn-sm">
+      <img src="https://cdnjs.cloudflare.com/ajax/libs/octicons/8.5.0/svg/trashcan.svg">
+    </button>
+  </form>
+  {% endif %}
+</div>
+{% endmacro %}

@@ -1,35 +1,18 @@
-{% macro posts_feed(posts, current_user) %}
+{% from "macros/post.html" import post_card_header with context %}
+
+{% macro posts_feed(posts) %}
 <div>
   {% for post in posts %}
   <div class="card mb-2">
-    <!-- Post header: Poster name, user owning the wall, timestamp. Controls for owning user -->
-    <div class="card-header d-flex flex-row align-items-center py-2">
-      <a href="{{ url_for('user_wall', id=post.poster_id) }}">
-        <h5>{{ post.poster_name }}</h5>
-      </a>
-      <small class="ml-1">{{ '(You)' if post.poster_id == current_user.id else '' }}</small>
-      <!-- If not posted on own wall, show name of the user who's wall the post is on -->
-      {% if post.poster_id != post.wall_owner_id %}
-      <span class="mx-2">></span>
-      <a href="{{ url_for('user_wall', id=post.wall_owner_id) }}">{{ post.wall_owner_name }}</a>
-      <small class="ml-1">{{ '(You)' if post.wall_owner_id == current_user.id else '' }}</small>
-      {% endif %}
-      <!-- Posted X ago -->
-      <small class="text-muted ml-auto mr-2">
-        {{ timeago_format(post.date_created) }}
-      </small>
-      <!-- Controls for edit/delete -->
-      {% if post.poster_id == current_user.id %}
-      <a class="btn btn-outline-secondary btn-sm" href="{{ url_for('posts_edit', post_id=post.post_id, **kwargs) }}">
-        <img src="https://cdnjs.cloudflare.com/ajax/libs/octicons/8.5.0/svg/pencil.svg">
-      </a>
-      <form method="POST" action="{{ url_for('posts_remove', post_id=post.post_id, **kwargs) }}">
-        <button type="submit" class="ml-2 btn btn-outline-danger btn-sm">
-          <img src="https://cdnjs.cloudflare.com/ajax/libs/octicons/8.5.0/svg/trashcan.svg">
-        </button>
-      </form>
-      {% endif %}
-    </div>
+    {{ post_card_header(
+      post.post_id,
+      post.date_created,
+      post.poster_id,
+      post.poster_name,
+      post.wall_owner_id,
+      post.wall_owner_name,
+      **kwargs
+    ) }}
     <!-- Post content -->
     <div class="card-body">
       <p class="card-text post-content">{{ post.content }}</p>
@@ -43,8 +26,11 @@
       </small>
     </div>
     {% endif %}
-    <div>
-
+    <div class="card-body text-center py-2">
+      <hr class="mt-0 mb-2">
+      <a href="{{ url_for('comments_conversation', id=post.post_id, **kwargs) }}">
+        View conversation ({{ post.comment_count }})
+      </a>
     </div>
   </div>
   {% endfor %}

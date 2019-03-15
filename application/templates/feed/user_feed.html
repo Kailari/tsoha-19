@@ -7,7 +7,7 @@
   <hr class="my-0">
   <small class="text-muted">All posts from your own wall and from all of your subscribed walls.</small>
 </div>
-{{ posts_feed(posts, current_user, redir='user_feed', redir_id=current_user.id) }}
+{{ posts_feed(posts, redir='user_feed', redir_id=current_user.id, back='user_feed', back_id=current_user.id) }}
 <div>
   <div class="overlay" onclick="backToTop()">
     <span class="text-white">Back to top</span>

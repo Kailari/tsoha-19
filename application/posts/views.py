@@ -25,12 +25,12 @@ def posts_form():
 def posts_remove(post_id):
     post = Post.query.get(post_id)
     if not post.owner_id == current_user.id:
-        return try_redirect(request, "posts_list", error="Not authorized")
+        return redirect("oops", error="Not authorized")
 
     db.session().delete(post)
     db.session().commit()
 
-    return try_redirect(request, "posts_list")
+    return try_redirect("posts_list", **request.args)
 
 
 @app.route("/posts/<post_id>/edit", methods=["GET", "POST"])
@@ -38,7 +38,7 @@ def posts_remove(post_id):
 def posts_edit(post_id):
     post = Post.query.get(post_id)
     if not post.owner_id == current_user.id:
-        return try_redirect(request, "posts_list", error="Not authorized")
+        return redirect("oops", error="Not authorized")
 
     if request.method == "GET":
         return render_template("posts/edit.html",
@@ -46,18 +46,16 @@ def posts_edit(post_id):
                                form=PostForm(MultiDict({
                                    "content": post.content
                                })),
-                               redir=request.args.get("redir"),
-                               redir_id=request.args.get("redir_id"))
+                               **request.args)
 
     form = PostForm(request.form)
     if not form.validate():
         return render_template("posts/edit.html",
                                post_id=post_id,
                                form=form,
-                               redir=request.args.get("redir"),
-                               redir_id=request.args.get("redir_id"))
+                               **request.args)
 
     post.content = form.content.data
     db.session().commit()
 
-    return try_redirect(request, "posts_list")
+    return try_redirect("user_wall", id=post.owner_id, **request.args)

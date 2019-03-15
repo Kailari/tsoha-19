@@ -35,6 +35,7 @@ def load_views():
     from application.feed import views
     from application.wall import views
     from application.search import views
+    from application.comments import views
 
 
 def configure_login_manager(app):

@@ -15,7 +15,7 @@ def user_wall(id):
     user = User.query.get(id)
 
     if not user:
-        return redirect(url_for("user_feed",
+        return redirect(url_for("oops",
                                 error="Invalid user ID"))
 
     if request.method == "GET":
@@ -57,7 +57,7 @@ def wall_unsub(id):
         db.session().delete(subscription)
         db.session().commit()
 
-    return try_redirect(request, "user_wall", **request.args, id=id)
+    return try_redirect("user_wall", **request.args, id=id)
 
 
 @app.route("/wall/<id>/subscribe", methods=["POST"])
@@ -67,4 +67,4 @@ def wall_sub(id):
     db.session().add(subscription)
     db.session().commit()
 
-    return try_redirect(request, "user_wall", **request.args, id=id)
+    return try_redirect("user_wall", **request.args, id=id)
