@@ -104,8 +104,8 @@ class Post(WithIDAndDatesCreatedAndModified):
                 "poster_name": row["poster_name"],
                 "wall_owner_id": row["wall_owner_id"],
                 "wall_owner_name": row["wall_owner_name"],
-                "date_created": Post._process_date(row["date_created"]),
-                "date_modified": Post._process_date(row["date_modified"]),
+                "date_created": row["date_created"],
+                "date_modified": row["date_modified"],
                 "content": row["content"],
             })
         return posts
