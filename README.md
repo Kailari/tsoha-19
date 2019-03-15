@@ -12,7 +12,7 @@ Sosiaalisen median palvelu Facebookin/Twitterin hengessä. Kullakin käyttäjäl
  - Päivityksiä voi hakea avainsanoilla ja/tai ajankohdan mukaan
 
 ## Sovellus
-Sovelluksen backend pyörii Python + Flask combolla ja renderöi frontin flaskin templaateilla. "Tuotantoversio" raksuttaa Herokussa.
+Sovelluksen backend pyörii Python + Flask combolla ja renderöi frontin flaskin templaateilla (*Jinja2*). "Tuotantoversio" raksuttaa Herokussa.
 
 [Linkki sovellukseen](http://tsohabook.herokuapp.com)
 
@@ -27,3 +27,5 @@ Sovellukseen on luotu kokeilua varten testikäyttäjät "Jaska Jokunen" ja "Joku
  - [User stories](./doc/user_stories.md)
 
  - [Tietokantakaavio](./doc/tietokantakaavio.md)
+
+ - [Kehitysympäristön asennus](./doc/setting_up_development.md)
