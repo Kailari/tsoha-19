@@ -14,6 +14,7 @@ def configure_bcrypt(app):
 def configure_database(app):
     app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL")
     if not os.environ.get("HEROKU"):
+        app.config["DEBUG"] = True
         app.config["SQLALCHEMY_ECHO"] = True
 
     from flask_sqlalchemy import SQLAlchemy

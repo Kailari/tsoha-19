@@ -11,3 +11,5 @@ __pycache__
 
 # Other
 .env
+pg_upgrade*
+*.log

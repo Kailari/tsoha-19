@@ -25,23 +25,12 @@ class Post(WithIDAndDatesCreatedAndModified):
         self.owner_id = owner_id
         self.wall_id = wall_id
 
-    def _process_date(date):
-        if os.environ.get("HEROKU"):
-            return date
-        else:
-            return datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S.%f")
-
     @staticmethod
     def get_posts_for_user_wall(user_id, older_than=None, limit=-1):
         if older_than == None:
             # Ugly hack to make sure new posts are considered "new enough" to be selected
             # If pagination is implemented, this can be discarded
             older_than = datetime.datetime.utcnow() + datetime.timedelta(seconds=30)
-
-        if os.environ.get("HEROKU"):
-            stmt_where_date = " AND Post.date_created <= CAST(:older_than AS timestamp)"
-        else:
-            stmt_where_date = " AND Post.date_created <= Datetime(:older_than)"
 
         stmt = text("SELECT "
                     " Post.id AS post_id,"
@@ -57,7 +46,7 @@ class Post(WithIDAndDatesCreatedAndModified):
                     "  INNER JOIN Wall ON Wall.id = Post.wall_id"
                     "  INNER JOIN Account AS WallOwner ON WallOwner.id = Wall.id"
                     " WHERE WallOwner.id = :user_id"
-                    + stmt_where_date +
+                    "   AND Post.date_created <= CAST(:older_than AS timestamp)"
                     "  GROUP BY Post.id, Poster.id, Poster.name, WallOwner.id"
                     "  ORDER BY Post.date_created DESC" +
                     ("  LIMIT :limit" if limit > 0 else "")
@@ -72,8 +61,8 @@ class Post(WithIDAndDatesCreatedAndModified):
                 "poster_name": row["poster_name"],
                 "wall_owner_id": row["wall_owner_id"],
                 "wall_owner_name": row["wall_owner_name"],
-                "date_created": Post._process_date(row["date_created"]),
-                "date_modified": Post._process_date(row["date_modified"]),
+                "date_created": row["date_created"],
+                "date_modified": row["date_modified"],
                 "content": row["content"],
             })
         return posts
@@ -84,11 +73,6 @@ class Post(WithIDAndDatesCreatedAndModified):
             # Ugly hack to make sure new posts are considered "new enough" to be selected
             # If pagination is implemented, this can be discarded
             older_than = datetime.datetime.utcnow() + datetime.timedelta(seconds=30)
-
-        if os.environ.get("HEROKU"):
-            stmt_where_date = " AND Post.date_created <= CAST(:older_than AS timestamp)"
-        else:
-            stmt_where_date = " AND Post.date_created <= Datetime(:older_than)"
 
         stmt = text("SELECT "
                     " Post.id AS post_id,"
@@ -105,7 +89,7 @@ class Post(WithIDAndDatesCreatedAndModified):
                     "  LEFT JOIN Subscription ON Subscription.wall_id = Wall.id"
                     "  LEFT JOIN Account AS WallOwner ON WallOwner.id = Wall.id"
                     "  WHERE (Subscription.owner_id = :user_id OR Post.owner_id = :user_id OR Post.wall_id = :user_wall_id)"
-                    + stmt_where_date +
+                    "    AND Post.date_created <= CAST(:older_than AS timestamp)"
                     "  GROUP BY Post.id, Poster.id, Poster.name, WallOwner.id"
                     "  ORDER BY Post.date_created DESC" +
                     ("  LIMIT :limit" if limit > 0 else "")
