@@ -9,9 +9,11 @@
         Something went wrong. If you think this is a bug in the application, please open an issue at our
         <a href=http://github.com/Kailari/tsoha-19/issues>issue-tracker</a> and let us know!
     </div>
+    {% if error %}
     <div class="card-body">
         <h5>Description of the error:</h5>
         {{ error }}
     </div>
+    {% endif %}
 </div>
 {% endblock %}

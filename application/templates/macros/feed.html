@@ -20,14 +20,14 @@
     <!-- Modified X ago -->
     {% if post.date_modified != post.date_created %}
     <hr class="my-0">
-    <div class="card-body pt-0 pb-2">
+    <div class="card-body pt-1 pb-2">
       <small class="card-text">
         Edited {{ timeago_format(post.date_modified) }}
       </small>
     </div>
     {% endif %}
+    <hr class="mt-0 mb-0">
     <div class="card-body text-center py-2">
-      <hr class="mt-0 mb-2">
       <a href="{{ url_for('comments_conversation', id=post.post_id, **kwargs) }}">
         View conversation ({{ post.comment_count }})
       </a>

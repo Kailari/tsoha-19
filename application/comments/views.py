@@ -56,7 +56,7 @@ def comments_remove(comment_id):
     db.session().delete(comment)
     db.session().commit()
 
-    return try_redirect("posts_list", **request.args)
+    return try_redirect("oops", **request.args)
 
 
 @app.route("/comments/<comment_id>/edit", methods=["GET", "POST"])
@@ -86,4 +86,4 @@ def comments_edit(comment_id):
     comment.content = form.content.data
     db.session().commit()
 
-    return try_redirect("comments_create", post_id=comment.post_id)
+    return try_redirect("comments_conversation", id=comment.post_id)

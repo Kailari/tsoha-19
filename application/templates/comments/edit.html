@@ -2,7 +2,7 @@
 
 {% block body %}
 <div class="card mb-2">
-  <form method="POST" action="{{ url_for('posts_edit', post_id=post_id, redir=redir, redir_id=redir_id) }}" novalidate>
+  <form method="POST" action="{{ url_for('comments_edit', comment_id=comment_id, redir=redir, redir_id=redir_id, back=back, back_id=back_id) }}" novalidate>
     <label class="form-label card-header w-100" for="newContent">
       <h5>Edit comment
         <button type="submit" class="btn btn-primary float-sm-right">Edit</button>

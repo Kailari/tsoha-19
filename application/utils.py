@@ -3,7 +3,7 @@ from flask import redirect, url_for
 
 def try_redirect(fallback, **kwargs):
     redirect_target = kwargs.pop("redir", fallback)
-    redirect_target_id = kwargs.pop("redir_id")
+    redirect_target_id = kwargs.pop("redir_id", None)
 
     try:
         if redirect_target_id:

@@ -30,7 +30,7 @@ def posts_remove(post_id):
     db.session().delete(post)
     db.session().commit()
 
-    return try_redirect("posts_list", **request.args)
+    return try_redirect("oops", **request.args)
 
 
 @app.route("/posts/<post_id>/edit", methods=["GET", "POST"])
@@ -58,4 +58,4 @@ def posts_edit(post_id):
     post.content = form.content.data
     db.session().commit()
 
-    return try_redirect("user_wall", id=post.owner_id, **request.args)
+    return try_redirect("oops", **request.args)

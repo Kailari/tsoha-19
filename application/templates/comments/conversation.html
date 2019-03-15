@@ -24,18 +24,35 @@
     <div class="card-body">
       {{ post.content }}
     </div>
+
+    <!-- Comments -->
     <div class="card-body py-0">
       <hr>
       {% if post.comments %}
       <ul class="list-unstyled">
-        {% for comment in post.comments %}
+        {% for comment in post.comments|sort(attribute='date_created',reverse=True) %}
         <li class="media">
           <div class="media-body">
-            <h5 class="mt-0 mb-1">Joku Jaskanen</h5>
+            <h5 class="mt-0 mb-1">{{ comment.owner.name }}</h5>
             <p class="pl-2">
               {{ comment.content }}
             </p>
           </div>
+          <!-- Posted X ago -->
+          <small class="text-muted ml-auto mr-2">
+            {{ timeago_format(comment.date_created) }}
+          </small>
+          <!-- Controls for edit/delete -->
+          {% if comment.owner_id == current_user.id %}
+          <a class="btn btn-outline-secondary btn-sm" href="{{ url_for('comments_edit', comment_id=comment.id, redir='comments_conversation', redir_id=comment.id, back=back, back_id=back_id) }}">
+            <img src="https://cdnjs.cloudflare.com/ajax/libs/octicons/8.5.0/svg/pencil.svg">
+          </a>
+          <form method="POST" action="{{ url_for('comments_remove', comment_id=comment.id, redir='comments_conversation', redir_id=post.id, back=back, back_id=back_id) }}">
+            <button type="submit" class="ml-2 btn btn-outline-danger btn-sm">
+              <img src="https://cdnjs.cloudflare.com/ajax/libs/octicons/8.5.0/svg/trashcan.svg">
+            </button>
+          </form>
+          {% endif %}
         </li>
         {% endfor %}
       </ul>
@@ -47,6 +64,8 @@
       </div>
       {% endif %}
     </div>
+
+    <!-- Add comment -->
     <div class="card-body pt-0">
       <form method="POST" action="{{ url_for('comments_conversation', id=post.id, back=back, back_id=back_id) }}"
         novalidate>
