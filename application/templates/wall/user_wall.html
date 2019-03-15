@@ -62,7 +62,7 @@
 </div>
 
 <h2>Posts</h2>
-{{ posts_feed(posts, current_user, "user_wall", user.id) }}
+{{ posts_feed(posts, current_user, redir='user_wall', redir_id=user.id) }}
 <div>
   <div class="overlay" onclick="backToTop()">
     <span class="text-white">Back to top</span>
