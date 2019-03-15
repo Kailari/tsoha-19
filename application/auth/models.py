@@ -79,7 +79,6 @@ class User(WithIDAndDateCreated):
 
         users = []
         for row in res:
-            print("typeof row: {}".format(type(row)))
             users.append({
                 "id": row["id"],
                 "name": row["name"],
