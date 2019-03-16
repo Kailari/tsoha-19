@@ -63,6 +63,10 @@ class User(WithIDAndDateCreated):
 
     @staticmethod
     def find_users_by_partial_username(name_filter, user_id):
+        parsed_filter = re.search('\w+(\s+\w+)*', name_filter)
+        if not parsed_filter:
+            return []
+
         stmt = text(
             "SELECT"
             "  Account.id AS id,"
@@ -74,7 +78,7 @@ class User(WithIDAndDateCreated):
             "                      AND Subscription.owner_id = :user_id"
             " WHERE UPPER(Account.name) LIKE UPPER(:name_filter)"
         ).params(user_id=user_id,
-                 name_filter="%{}%".format(re.sub('[\W_]+', '', name_filter)))
+                 name_filter="%{}%".format(parsed_filter.group()))
         res = db.engine.execute(stmt)
 
         users = []

@@ -1,3 +1,4 @@
+import re
 from application import app, db
 from application.utils import try_redirect
 from flask import render_template, request, redirect, url_for
@@ -55,7 +56,10 @@ def posts_edit(post_id):
                                form=form,
                                **request.args)
 
-    post.content = form.content.data
+    post.content = re.sub(r"^\s+",
+                          "",
+                          form.content.data,
+                          flags=re.MULTILINE).strip()
     db.session().commit()
 
     return try_redirect("oops", **request.args)

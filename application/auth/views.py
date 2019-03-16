@@ -57,4 +57,10 @@ def auth_register():
     db.session().commit()
 
     print("User " + user.name + " registered")
-    return redirect(url_for("index"))
+    return redirect(url_for("auth_register_success", name=user.name))
+
+
+@app.route("/auth/success", methods=["GET"])
+def auth_register_success():
+    return render_template("auth/success.html",
+                           name=request.args.get("name"))
