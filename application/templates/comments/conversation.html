@@ -21,9 +21,7 @@
       back=back,
       back_id=back_id
     ) }}
-    <div class="card-body">
-      {{ post.content }}
-    </div>
+    <div class="card-body post-content">{{ post.content }}</div>
 
     <!-- Comments -->
     <div class="card-body py-0">
@@ -34,9 +32,7 @@
         <li class="media">
           <div class="media-body">
             <h5 class="mt-0 mb-1">{{ comment.owner.name }}</h5>
-            <p class="pl-2">
-              {{ comment.content }}
-            </p>
+            <p class="pl-2 post-content pt-0">{{ comment.content }}</p>
           </div>
           <!-- Posted X ago -->
           <small class="text-muted ml-auto mr-2">
