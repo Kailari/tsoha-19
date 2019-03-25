@@ -31,7 +31,7 @@ class Post(WithIDAndDatesCreatedAndModified):
             # Ugly hack to make sure new posts are considered "new enough" to be selected
             # If pagination is implemented, this can be discarded
             older_than = datetime.datetime.utcnow() + datetime.timedelta(seconds=30)
-
+        
         stmt = text("SELECT "
                     " Post.id AS post_id,"
                     " Post.owner_id AS poster_id,"
@@ -48,7 +48,7 @@ class Post(WithIDAndDatesCreatedAndModified):
                     "  INNER JOIN Wall ON Wall.id = Post.wall_id"
                     "  INNER JOIN Account AS WallOwner ON WallOwner.id = Wall.id"
                     " WHERE WallOwner.id = :user_id"
-                    "   AND Post.date_created <= CAST(:older_than AS timestamp)"
+                    "   AND Post.date_created < CAST(:older_than AS timestamp)"
                     "  GROUP BY Post.id, Poster.id, Poster.name, WallOwner.id"
                     "  ORDER BY Post.date_created DESC" +
                     ("  LIMIT :limit" if limit > 0 else "")
@@ -71,12 +71,7 @@ class Post(WithIDAndDatesCreatedAndModified):
         return posts
 
     @staticmethod
-    def get_posts_for_user_feed(user_id, older_than=None, limit=-1):
-        if older_than == None:
-            # Ugly hack to make sure new posts are considered "new enough" to be selected
-            # If pagination is implemented, this can be discarded
-            older_than = datetime.datetime.utcnow() + datetime.timedelta(seconds=30)
-
+    def get_posts_for_user_feed(user_id, older_than, limit=-1):
         stmt = text("SELECT "
                     " Post.id AS post_id,"
                     " Poster.id AS poster_id,"
@@ -94,7 +89,7 @@ class Post(WithIDAndDatesCreatedAndModified):
                     "  LEFT JOIN Subscription ON Subscription.wall_id = Wall.id"
                     "  LEFT JOIN Account AS WallOwner ON WallOwner.id = Wall.id"
                     "  WHERE (Subscription.owner_id = :user_id OR Post.owner_id = :user_id OR Post.wall_id = :user_wall_id)"
-                    "    AND Post.date_created <= CAST(:older_than AS timestamp)"
+                    "    AND Post.date_created < CAST(:older_than AS timestamp)"
                     "  GROUP BY Post.id, Poster.id, Poster.name, WallOwner.id"
                     "  ORDER BY Post.date_created DESC" +
                     ("  LIMIT :limit" if limit > 0 else "")

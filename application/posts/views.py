@@ -9,12 +9,6 @@ from application.posts.forms import PostForm
 from werkzeug.datastructures import MultiDict
 
 
-@app.route("/posts", methods=["GET"])
-@login_required
-def posts_list():
-    return render_template("posts/list.html", posts=Post.query.all())
-
-
 @app.route("/posts/create/")
 @login_required
 def posts_form():
