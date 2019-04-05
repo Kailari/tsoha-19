@@ -1,4 +1,5 @@
 import re
+import datetime
 from application import app, db
 from application.utils import try_redirect
 from flask import render_template, request, redirect, url_for
@@ -19,10 +20,18 @@ def user_wall(id):
                                 error="Invalid user ID"))
 
     if request.method == "GET":
+        limit = 5
+        older_than = request.args.get("older_than")
+        if older_than == None:
+            older_than = datetime.datetime.utcnow() + datetime.timedelta(seconds=30)
+
         return render_template("wall/user_wall.html",
-                               posts=Post.get_posts_for_user_wall(id),
+                               posts=Post.get_posts_for_user_wall(id,
+                                                                  older_than=older_than,
+                                                                  limit=limit),
                                user=user,
-                               form=PostForm())
+                               form=PostForm(),
+                               limit=limit)
 
     form = PostForm(request.form)
 
@@ -32,7 +41,7 @@ def user_wall(id):
                                user=user,
                                form=form)
 
-    content = re.sub(r"^\s+", 
+    content = re.sub(r"^\s+",
                      "",
                      form.content.data,
                      flags=re.MULTILINE).strip()

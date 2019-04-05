@@ -26,12 +26,7 @@ class Post(WithIDAndDatesCreatedAndModified):
         self.wall_id = wall_id
 
     @staticmethod
-    def get_posts_for_user_wall(user_id, older_than=None, limit=-1):
-        if older_than == None:
-            # Ugly hack to make sure new posts are considered "new enough" to be selected
-            # If pagination is implemented, this can be discarded
-            older_than = datetime.datetime.utcnow() + datetime.timedelta(seconds=30)
-        
+    def get_posts_for_user_wall(user_id, older_than, limit=-1):
         stmt = text("SELECT "
                     " Post.id AS post_id,"
                     " Post.owner_id AS poster_id,"

@@ -64,14 +64,26 @@
 <h2>Posts</h2>
 {{ posts_feed(posts, redir='user_wall', redir_id=user.id, back='user_wall', back_id=user.id) }}
 <div>
-  <div class="overlay" onclick="backToTop()">
-    <span class="text-white">Back to top</span>
+  {% if posts|count == limit %}
+  {% set last = posts|last %}
+  <a class="overlay text-white text-center" href="{{ url_for('user_wall', id=user.id, older_than=last.date_created ) }}">
+    Load more
+  </a>
+  <div class="text-center">
+    <hr>
+    <span class="text-muted">Load more</span>
+    <hr>
   </div>
+  {% else %}
+  <a class="overlay text-white text-center" href="{{ url_for('user_wall', id=user.id) }}">
+    Back to top
+  </a>
   <div class="text-center">
     <hr>
     <span class="text-muted">No more posts :c</span>
     <hr>
   </div>
+  {% endif %}
 </div>
 {% endblock %}
 
