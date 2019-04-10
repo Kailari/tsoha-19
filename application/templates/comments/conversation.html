@@ -28,7 +28,7 @@
       <hr>
       {% if post.comments %}
       <ul class="list-unstyled">
-        {% for comment in post.comments|sort(attribute='date_created',reverse=True) %}
+        {% for comment in post.comments|sort(attribute='date_created') %}
         <li class="media">
           <div class="media-body">
             <h5 class="mt-0 mb-1">{{ comment.owner.name }}</h5>
