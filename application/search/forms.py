@@ -7,7 +7,8 @@ class SearchForm(FlaskForm):
                               validators=[
                                   validators.Length(
                                       min=1,
-                                      message="Search term must be at least 1 character long")])
+                                      max=100,
+                                      message="Search term must be between 1 to 100 character long")])
 
     class Meta:
         csrf = False
