@@ -26,13 +26,13 @@ class UniqueUsername(object):
         if User.user_with_username_exists(field.data):
             raise ValidationError(self.message)
 
-
 class RegisterForm(FlaskForm):
     name = StringField("Name", [
         validators.required(),
         validators.Length(
             min=4,
-            message="name must be at least 4 characters")])
+            max=100,
+            message="name must be between 4 to 100 characters long")])
 
     username = StringField("Username", [
         validators.required(),
@@ -47,7 +47,8 @@ class RegisterForm(FlaskForm):
         validators.required(),
         validators.Length(
             min=6,
-            message="password must be at least 6 characters long")])
+            max=100,
+            message="password must be between 6 to 100 characters long")])
 
     class Meta:
         csrf = False
