@@ -28,4 +28,4 @@ Sovellukseen on luotu kokeilua varten testikäyttäjät "Jaska Jokunen" ja "Joku
 
  - [Tietokantakaavio](./doc/tietokantakaavio.md)
 
- - [Kehitysympäristön asennus](./doc/setting_up_development.md)
+ - [Asennusohje](./doc/asennusohje.md)
