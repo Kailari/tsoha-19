@@ -1,5 +1,5 @@
 # Asennusohje
-Tässä ohjeessa vaiheittain sovelluksen asentaminen ja suorittaminen paikallisesti lähdekoodista.
+Tässä ohjeessa vaiheittain sovelluksen asentaminen ja suorittaminen paikallisesti lähdekoodista. Projektin juuressa on `Procfile` Herokussa suorittamista varten.
 
 ## Ennakkovaatimukset
 - PostgreSQL palvelin johon viitataan ympäristömuuttujalla `DATABASE_URL` (ks. [ohje postgresql asennukseen](./postgresql_asennus.md))
