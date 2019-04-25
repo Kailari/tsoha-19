@@ -5,6 +5,7 @@ from application.utils import try_redirect
 from flask import render_template, request, redirect, url_for
 from flask_login import login_required, current_user
 from application.posts.models import Post
+from application.comments.models import Comment
 from application.auth.models import User
 from application.wall.models import Subscription
 from application.posts.forms import PostForm
@@ -14,6 +15,10 @@ from application.posts.forms import PostForm
 @login_required
 def user_wall(id):
     user = User.query.get(id)
+    subscriber_count = Subscription.query.filter_by(wall_id=user.wall.id).count()
+    subscription_count = Subscription.query.filter_by(owner_id=user.id).count()
+    post_count = Post.query.filter_by(owner_id=user.id).count()
+    comment_count = Comment.query.filter_by(owner_id=user.id).count()
 
     if not user:
         return redirect(url_for("oops",
@@ -31,7 +36,11 @@ def user_wall(id):
                                                                   limit=limit),
                                user=user,
                                form=PostForm(),
-                               limit=limit)
+                               limit=limit,
+                               subscriber_count=subscriber_count,
+                               subscription_count=subscription_count,
+                               post_count=post_count,
+                               comment_count=comment_count)
 
     form = PostForm(request.form)
 
@@ -39,7 +48,11 @@ def user_wall(id):
         return render_template("wall/user_wall.html",
                                posts=Post.get_posts_for_user_wall(id),
                                user=user,
-                               form=form)
+                               form=form,
+                               subscriber_count=subscriber_count,
+                               subscription_count=subscription_count,
+                               post_count=post_count,
+                               comment_count=comment_count)
 
     content = re.sub(r"^\s+",
                      "",
