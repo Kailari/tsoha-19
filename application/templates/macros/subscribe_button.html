@@ -1,7 +1,10 @@
 {% macro subscribe_button(user, current_user, is_subscriber) %}
 
-{% if user.id != current_user.id %}
-{% if is_subscriber %}
+{% if user.id == current_user.id %}
+<div class="card" style="width: 6rem;">
+  <h6 class="text-center mt-2" style="user-select: none">You</h6>
+</div>
+{% elif is_subscriber %}
 <form style="width: 6rem;" method="POST" action="{{ url_for('wall_unsub', id=user.id, **kwargs) }}">
   <button type="submit" class="btn btn-outline-primary">Following</button>
 </form>
@@ -9,11 +12,6 @@
 <form style="width: 6rem;" method="POST" action="{{ url_for('wall_sub', id=user.id, **kwargs) }}">
   <button type="submit" class="btn btn-primary">Subscribe</button>
 </form>
-{% endif %}
-{% else %}
-<div class="card" style="width: 6rem;">
-  <h6 class="text-center mt-2" style="user-select: none">You</h6>
-</div>
 {% endif %}
 
 {% endmacro %}
