@@ -36,7 +36,13 @@
           </div>
           <!-- Posted X ago -->
           <small class="text-muted ml-auto mr-2">
-            {{ timeago_format(comment.date_created) }}
+            {% if comment.date_created != comment.date_modified %}
+            <u class="dotted" title="Edited {{ timeago_format(comment.date_modified) }}">
+                {{ timeago_format(comment.date_created) }}              
+            </u>
+            {% else %}
+              {{ timeago_format(comment.date_created) }}
+            {% endif %}
           </small>
           <!-- Controls for edit/delete -->
           {% if comment.owner_id == current_user.id %}

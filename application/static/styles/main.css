@@ -63,3 +63,8 @@ a.skip-main:focus, a.skip-main:active {
     font-size:1.2em;
     z-index:999;
 }
+
+u.dotted {
+    border-bottom: 1px dashed #999;
+    text-decoration: none;
+}
