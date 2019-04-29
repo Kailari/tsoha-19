@@ -19,7 +19,7 @@ Sosiaalisen median palvelu Facebookin/Twitterin hengessä. Kullakin käyttäjäl
  - Käyttäjä voi tilata muiden käyttäjien päivityksiä (ja perua tilauksen)
  - Käyttäjälle kootaan yhdelle sivulle kaikki tilattujen käyttäjien päivityksen kronologisessa järjestyksessä
 
-## Jatkokehitysideoita/ominaisuudet joita ei ole toteutettu
+### Jatkokehitysideoita/ominaisuudet joita ei ole toteutettu
  - Päivityksiä voi hakea avainsanoilla ja/tai ajankohdan mukaan
 
 
