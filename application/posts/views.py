@@ -20,12 +20,12 @@ def posts_form():
 def posts_remove(post_id):
     post = Post.query.get(post_id)
     if not post.owner_id == current_user.id:
-        return redirect("oops", error="Not authorized")
+        return redirect(url_for("oops", error="Not authorized"))
 
     db.session().delete(post)
     db.session().commit()
 
-    return try_redirect("oops", **request.args)
+    return redirect(url_for("user_feed", **request.args))
 
 
 @app.route("/posts/<post_id>/edit", methods=["GET", "POST"])
@@ -33,7 +33,7 @@ def posts_remove(post_id):
 def posts_edit(post_id):
     post = Post.query.get(post_id)
     if not post.owner_id == current_user.id:
-        return redirect("oops", error="Not authorized")
+        return redirect(url_for("oops", error="Not authorized"))
 
     if request.method == "GET":
         return render_template("posts/edit.html",

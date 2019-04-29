@@ -15,7 +15,7 @@ from werkzeug.datastructures import MultiDict
 def comments_conversation(id):
     post = Post.query.get(id)
     if not post:
-        return redirect("oops", error="Post not found")
+        return redirect(url_for("oops", error="Post not found"))
 
     if request.method == "GET":
         return render_template("comments/conversation.html",
@@ -51,7 +51,7 @@ def comments_conversation(id):
 def comments_remove(comment_id):
     comment = Comment.query.get(comment_id)
     if not comment.owner_id == current_user.id:
-        return redirect("oops", error="Not authorized")
+        return redirect(url_for("oops", error="Not authorized"))
 
     db.session().delete(comment)
     db.session().commit()
@@ -64,7 +64,7 @@ def comments_remove(comment_id):
 def comments_edit(comment_id):
     comment = Comment.query.get(comment_id)
     if not comment.owner_id == current_user.id:
-        return redirect("oops", error="Not authorized")
+        return redirect(url_for("oops", error="Not authorized"))
 
     if request.method == "GET":
         return render_template("comments/edit.html",

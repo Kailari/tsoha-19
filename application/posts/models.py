@@ -17,7 +17,7 @@ class Post(WithIDAndDatesCreatedAndModified):
                         db.ForeignKey('wall.id'),
                         nullable=False)
 
-    comments = db.relationship("Comment", backref='post', lazy=True)
+    comments = db.relationship("Comment", backref='post', lazy=True, cascade="all, delete-orphan")
 
     def __init__(self, content, owner_id, wall_id):
         super().__init__()
