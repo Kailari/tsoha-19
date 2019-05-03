@@ -23,6 +23,6 @@ Kehitystä varten uuden kannan luominen osoitteessa `localhost:5432` raksuttavaa
     ```
  3. Tämän jälkeen luodaan projektin juureen tiedosto `.env` ja annetaan sille sisällöksi: 
   ```sh
-  export DATABASE_URL='postgresql://<käyttäjänimi>:<salasana>@localhost:5432/<tietokannan_nimi>'
+  export DATABASE_URL='postgresql://<käyttäjänimi>:<salasana>@localhost:<titokantapalvelimen portti>/<tietokannan_nimi>'
   export FLASK_ENV=development
   ```
