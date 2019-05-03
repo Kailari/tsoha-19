@@ -9,6 +9,8 @@ Sosiaalisen median palvelu Facebookin/Twitterin hengessä. Kullakin käyttäjäl
 
  - [Asennusohje](./doc/asennusohje.md)
 
+ - [Käyttöohje](./doc/kayttoohje.md)
+
 
 ## Toimintoja
  - Rekisteröityminen/Kirjautuminen
